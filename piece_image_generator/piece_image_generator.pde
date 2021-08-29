@@ -18,13 +18,14 @@ void setup() {
   pg.smooth();
   pg.beginDraw();
   //pg.stroke(0);
-  pg.fill(0);
-  myFont = createFont("FreeSerif.otf", 100);
-  pg.textFont(myFont);
-  pg.textAlign(CENTER, CENTER);
-  pg.translate(0, -10);
-  pg.text("\u265f", width/2, height/2);
+  pg.fill(50, 50, 255);
+  //myFont = createFont("FreeSerif.otf", 100);
+  //pg.textFont(myFont);
+  //pg.textAlign(CENTER, CENTER);
+  //pg.translate(0, -10);
+  //pg.text("\u265a", width/2, height/2);
+  pg.ellipse(width/2, height/2, width, height);
   pg.endDraw();
-  pg.save("bp.png");
+  pg.save("blue.png");
  
 }
