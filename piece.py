@@ -14,17 +14,21 @@ class Piece:
         self.color = color
         self.possible_moves = []
 
-    def update_piece(self):
+    def update_piece_img(self):
+        """Updates the image of a piece to selected if piece is selected"""
         if self.selected:
             self.curr_img = pygame.image.load("assets/red.png")
         else:
             self.curr_img = self.def_img
 
     def check_if_square_empty(self, board, pos):
-        for s in board.squares:
-            if s:
-                if s.row == pos[0] and s.col == pos[1]:
-                    return False
+        """Returns true if the input position is empty on the board"""
+        for r in range(len(board.squares)):
+            for c in range(len(board.squares[r])):
+                s = board.squares[r][c]
+                if s:
+                    if s.row == pos[0] and s.col == pos[1]:
+                        return False
         return True
 
     def calculate_moves(self, b):
@@ -50,7 +54,6 @@ class Piece:
                         available_moves.append((self.row - 1, self.col))
 
         if self.piece_type == "b":
-            print(self.row, self.col)
             for i, c in enumerate(range(self.col, 8)):
                 if self.check_if_square_empty(b, (self.row + i + 1, c + 1)):
                     available_moves.append((self.row + i + 1, c + 1))
@@ -157,9 +160,11 @@ class Piece:
                 available_moves.pop(i)
 
         # Remove all moves that land on another piece
-        for s in b.squares:
-            if s:
-                if (s.row, s.col) in available_moves:
-                    available_moves.remove((s.row, s.col))
+        for r in range(len(b.squares)):
+            for c in range(len(b.squares[r])):
+                s = b.squares[r][c]
+                if s:
+                    if (s.row, s.col) in available_moves:
+                        available_moves.remove((s.row, s.col))
 
         self.possible_moves = available_moves

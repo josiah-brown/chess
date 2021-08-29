@@ -24,11 +24,15 @@ while 1:
 
         # Check for mouse clicks
         if event.type == pygame.MOUSEBUTTONDOWN:
+
+            # Get the position of the click
             pos = pygame.mouse.get_pos()
-            # If a piece was clicked
-            if board.clicked_a_piece(pos):
-                # Store the clicked piece
-                curr_piece = board.get_clicked_piece(pos)
+
+            # Store the clicked piece
+            curr_piece = board.get_clicked_piece(pos)
+
+            # If the piece exists
+            if curr_piece:
                 # If it was already selected, deselect
                 if curr_piece.selected:
                     curr_piece.selected = False
@@ -36,6 +40,7 @@ while 1:
                 else:
                     board.deselect_all()
                     curr_piece.selected = True
+
             if board.clicked_possible_move(pos):
                 board.move_selected_piece(pos)
 
@@ -44,14 +49,16 @@ while 1:
 
     # Draw all current elements onto screen
     screen.blit(board.img, (0, 0))
-    for p in board.squares:
-        if p:
-            p.update_piece()
-            screen.blit(p.curr_img, ((p.col - 1) * 100, height - p.row * 100))
-            if p.selected:
-                p.calculate_moves(board)
-                for m in p.possible_moves:
-                    screen.blit(highlight, ((m[1] - 1) * 100, height - m[0] * 100))
+    for r in range(len(board.squares)):
+        for c in range(len(board.squares[r])):
+            s = board.squares[r][c]
+            if s:
+                s.update_piece_img()
+                screen.blit(s.curr_img, ((s.col - 1) * 100, height - s.row * 100))
+                if s.selected:
+                    s.calculate_moves(board)
+                    for m in s.possible_moves:
+                        screen.blit(highlight, ((m[1] - 1) * 100, height - m[0] * 100))
 
     # Display the board
     pygame.display.flip()
