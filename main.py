@@ -1,8 +1,8 @@
 import sys
 import pygame
-from piece import Piece
 from board import Board
 from data import starting_positions
+from custom_functions import *
 
 # Initialize pygame
 pygame.init()
@@ -14,6 +14,12 @@ highlight = pygame.image.load("assets/blue.png")
 
 # Initialize a game board
 board = Board(starting_positions)
+# for s in board.squares:
+#     if s:
+#         print(s.board_index)
+
+# Useful variables
+selected_piece = None
 
 # Begin the game
 while 1:
@@ -26,39 +32,47 @@ while 1:
         if event.type == pygame.MOUSEBUTTONDOWN:
 
             # Get the position of the click
-            pos = pygame.mouse.get_pos()
+            click = pygame.mouse.get_pos()
+            curr_square_index = get_index_from_click(click)
 
-            # Store the clicked piece
-            curr_piece = board.get_clicked_piece(pos)
-
-            # If the piece exists
-            if curr_piece:
-                # If it was already selected, deselect
-                if curr_piece.selected:
-                    curr_piece.selected = False
-                # Otherwise, select the piece
+            # Is a piece selected?
+            if selected_piece:
+                # If click was on selected piece...
+                if selected_piece.board_index == curr_square_index:
+                    # Deselect the piece
+                    selected_piece = None
+                # If click was on possible move...
+                elif selected_piece.clicked_possible_move(click):
+                    # Make the move from old position to click
+                    board.move_selected_piece(selected_piece.board_index, click)
+                    selected_piece = None
                 else:
-                    board.deselect_all()
-                    curr_piece.selected = True
+                    selected_piece = None
 
-            if board.clicked_possible_move(pos):
-                board.move_selected_piece(pos)
+            # If no piece is selected...
+            elif selected_piece is None:
+                # If click was made on a piece...
+                if board.squares[curr_square_index]:
+                    # Select the piece
+                    selected_piece = board.squares[curr_square_index]
+                    selected_piece.calculate_moves(board)
+                # If click was on empty square, do nothing
+                # This can be deleted later. Here for the sake of clarity
+                else:
+                    pass
 
     # Erase previous screen
     screen.fill('#ffffff')
 
-    # Draw all current elements onto screen
+    # Draw the board
     screen.blit(board.img, (0, 0))
-    for r in range(len(board.squares)):
-        for c in range(len(board.squares[r])):
-            s = board.squares[r][c]
-            if s:
-                s.update_piece_img()
-                screen.blit(s.curr_img, ((s.col - 1) * 100, height - s.row * 100))
-                if s.selected:
-                    s.calculate_moves(board)
-                    for m in s.possible_moves:
-                        screen.blit(highlight, ((m[1] - 1) * 100, height - m[0] * 100))
+
+    # Draw pieces and then highlight possible moves if a piece is selected
+    for s in board.squares:
+        if s:
+            screen.blit(s.img, (get_blit_tuple_from_index(s.board_index, height)))
+    if selected_piece:
+        screen.blit(highlight, (get_blit_tuple_from_index(selected_piece.board_index, height)))
 
     # Display the board
     pygame.display.flip()

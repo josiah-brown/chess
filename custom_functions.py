@@ -1,5 +1,5 @@
 
-def get_position_from_click(click) -> tuple:
+def get_row_col_from_click(click) -> tuple:
     """Pass in tuple that represents click coordinates and return (col, row) of click"""
     r, c = 0, 0
 
@@ -37,3 +37,55 @@ def get_position_from_click(click) -> tuple:
     elif click[1] < 800:
         r = 1
     return r, c
+
+
+def check_if_square_empty(board, pos):
+    """Returns true if the input position is empty on the board"""
+    index = get_index_from_row_col(pos)
+    if board.squares[index]:
+        return False
+    return True
+
+
+def square_contains_enemy(board, pos, color):
+    """Returns true if the input position contains an enemy"""
+    for s in board.squares:
+        if s:
+            if s.row == pos[0] and s.col == pos[1] and (s.color != color):
+                return True
+    return False
+
+
+def get_index_from_click(click):
+    """Given a click tuple, returns the index of the click in the squares list"""
+    r_click, c_click = get_row_col_from_click(click)
+    return (c_click - 1) + (r_click - 1) * 8
+
+
+def get_index_from_row_col(pos):
+    """Given (row, col), return the index on the board"""
+    return (pos[1] - 1) + (pos[0] - 1) * 8
+
+
+def get_row_col_from_index(i: int) -> tuple:
+    """Given an index from 0-63, return (row, col) as tuple"""
+    col = (i + 1) % 8
+    row = int((i + 1 - col) / 8) + 1
+    return row, col
+
+
+def get_blit_tuple_from_index(i, h):
+    """Given an index on the board, returns the tuple to blit to"""
+    row, col = get_row_col_from_index(i)
+    # print(f"Index: {i}, (r, c): {row, col}")
+    return (col - 1) * 100, h - row * 100
+
+
+def remove_enemy_piece(board, pos):
+    pass
+#     "Removes the piece at the specified location if it exists"
+#     for s in board.squares:
+#         if s:
+#             if s.row == pos[0] and s.col == pos[1]:
+#                 del board.squares[r][c]
+#                 return
