@@ -35,6 +35,9 @@ class Board:
         r_new, c_new = get_row_col_from_click(new_pos)
         new_index = get_index_from_row_col((r_new, c_new))
 
+        # Remove opposing piece if attack was made
+        if self.squares[new_index]:
+            self.squares[new_index] = None
         # New square contains the piece
         self.squares[new_index] = self.squares[old_pos_index]
         # Update piece index

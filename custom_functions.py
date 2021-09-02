@@ -39,12 +39,22 @@ def get_row_col_from_click(click) -> tuple:
     return r, c
 
 
-def check_if_square_empty(board, pos):
+def square_is_empty(board, pos):
     """Returns true if the input position is empty on the board"""
     index = get_index_from_row_col(pos)
-    if board.squares[index]:
-        return False
+    if index < 64:
+        if board.squares[index]:
+            return False
     return True
+
+
+def is_enemy(board, pos, color):
+    """Returns true if square is enemy piece"""
+    index = get_index_from_row_col(pos)
+    if board.squares[index]:
+        if board.squares[index].color != color:
+            return True
+    return False
 
 
 def square_contains_enemy(board, pos, color):
@@ -69,7 +79,7 @@ def get_index_from_row_col(pos):
 
 def get_row_col_from_index(i: int) -> tuple:
     """Given an index from 0-63, return (row, col) as tuple"""
-    col = (i + 1) % 8
+    col = (i % 8) + 1
     row = int((i + 1 - col) / 8) + 1
     return row, col
 
@@ -78,14 +88,9 @@ def get_blit_tuple_from_index(i, h):
     """Given an index on the board, returns the tuple to blit to"""
     row, col = get_row_col_from_index(i)
     # print(f"Index: {i}, (r, c): {row, col}")
+    # print((col - 1) * 100, h - row * 100)
     return (col - 1) * 100, h - row * 100
 
 
-def remove_enemy_piece(board, pos):
-    pass
-#     "Removes the piece at the specified location if it exists"
-#     for s in board.squares:
-#         if s:
-#             if s.row == pos[0] and s.col == pos[1]:
-#                 del board.squares[r][c]
-#                 return
+def get_blit_tuple_from_row_col(rc, h):
+    return (rc[1] - 1) * 100, h - rc[0] * 100

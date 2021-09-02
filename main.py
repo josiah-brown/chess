@@ -10,7 +10,8 @@ pygame.init()
 # Create pygame screen
 size = width, height = 800, 800
 screen = pygame.display.set_mode(size)
-highlight = pygame.image.load("assets/blue.png")
+highlight_blue = pygame.image.load("assets/blue.png")
+highlight_red = pygame.image.load("assets/red.png")
 
 # Initialize a game board
 board = Board(starting_positions)
@@ -56,10 +57,6 @@ while 1:
                     # Select the piece
                     selected_piece = board.squares[curr_square_index]
                     selected_piece.calculate_moves(board)
-                # If click was on empty square, do nothing
-                # This can be deleted later. Here for the sake of clarity
-                else:
-                    pass
 
     # Erase previous screen
     screen.fill('#ffffff')
@@ -72,7 +69,9 @@ while 1:
         if s:
             screen.blit(s.img, (get_blit_tuple_from_index(s.board_index, height)))
     if selected_piece:
-        screen.blit(highlight, (get_blit_tuple_from_index(selected_piece.board_index, height)))
+        screen.blit(highlight_blue, (get_blit_tuple_from_index(selected_piece.board_index, height)))
+        for move in selected_piece.possible_moves:
+            screen.blit(highlight_red, (get_blit_tuple_from_row_col(move, height)))
 
     # Display the board
     pygame.display.flip()
