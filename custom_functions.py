@@ -85,7 +85,7 @@ def get_row_col_from_index(i: int) -> tuple:
 
 
 def get_blit_tuple_from_index(i, h):
-    """Given an index on the board, returns the tuple to blit to"""
+    """Given an index on the board, returns the blit tuple"""
     row, col = get_row_col_from_index(i)
     # print(f"Index: {i}, (r, c): {row, col}")
     # print((col - 1) * 100, h - row * 100)
@@ -93,4 +93,27 @@ def get_blit_tuple_from_index(i, h):
 
 
 def get_blit_tuple_from_row_col(rc, h):
+    """Given (row, col), returns the blit tuple"""
     return (rc[1] - 1) * 100, h - rc[0] * 100
+
+
+def king_is_in_check(board, color):
+    """Given the current board and current piece color, return True if current color king is in check"""
+    all_opposing_pieces = [p for p in board.squares if p and p.color != color]
+    moves = []
+    for piece in all_opposing_pieces:
+        piece.calculate_moves(board)
+        moves.extend(piece.possible_moves)
+
+    king_pos = None
+    for s in board.squares:
+        if s and s.color == color and s.piece_type == "k":
+            king_pos = get_row_col_from_index(s.board_index)
+
+    if king_pos in moves:
+        return True
+    return False
+
+
+
+

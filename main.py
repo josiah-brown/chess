@@ -1,3 +1,4 @@
+import copy
 import sys
 import pygame
 from board import Board
@@ -21,6 +22,8 @@ board = Board(starting_positions)
 
 # Useful variables
 selected_piece = None
+curr_player = "w"
+in_check = False
 
 # Begin the game
 while 1:
@@ -34,6 +37,7 @@ while 1:
 
             # Get the position of the click
             click = pygame.mouse.get_pos()
+            # Get square index of click
             curr_square_index = get_index_from_click(click)
 
             # Is a piece selected?
@@ -44,16 +48,34 @@ while 1:
                     selected_piece = None
                 # If click was on possible move...
                 elif selected_piece.clicked_possible_move(click):
-                    # Make the move from old position to click
-                    board.move_selected_piece(selected_piece.board_index, click)
-                    selected_piece = None
+                    # Make sure the king is not in check
+                    proposed_move_index = get_index_from_click(click)
+                    future_board = Board(copy.copy(board.squares))
+                    future_board.squares[proposed_move_index] = copy.copy(selected_piece)
+                    future_board.squares[proposed_move_index].board_index = proposed_move_index
+                    future_board.squares[selected_piece.board_index] = None
+                    in_check = king_is_in_check(future_board, selected_piece.color)
+                    del future_board
+                    if in_check:
+                        print("Move not allowed. King in check.")
+                        selected_piece = None
+                    # Make the move
+                    else:
+                        # Make the move from old position to click
+                        board.move_selected_piece(selected_piece.board_index, click)
+                        # Deselect current piece
+                        selected_piece = None
+                        # See if opposing king is in check
+                        # in_check = king_is_in_check(board, curr_player)
+                        # Switch active player
+                        curr_player = "w" if curr_player == "b" else "b"
                 else:
                     selected_piece = None
 
             # If no piece is selected...
             elif selected_piece is None:
                 # If click was made on a piece...
-                if board.squares[curr_square_index]:
+                if board.squares[curr_square_index] and board.squares[curr_square_index].color == curr_player:
                     # Select the piece
                     selected_piece = board.squares[curr_square_index]
                     selected_piece.calculate_moves(board)
