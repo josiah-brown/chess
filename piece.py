@@ -12,6 +12,7 @@ class Piece:
         self.piece_type = piece_type
         self.color = color
         self.possible_moves = []
+        self.moved = False
 
     def calculate_moves(self, b):
         """Pass in the current board and set the pieces possible_moves attribute to a list of all possible moves"""
@@ -30,8 +31,11 @@ class Piece:
                         available_moves.append((row + 1, col))
                 attacks = [(row + 1, col - 1), (row + 1, col + 1)]
                 for move in attacks:
-                    if is_enemy(b, move, self.color):
-                        available_moves.append(move)
+                    if move[0] < 1 or move[0] > 8 or move[1] > 8 or move[1] < 1:
+                        continue
+                    else:
+                        if is_enemy(b, move, self.color):
+                            available_moves.append(move)
             if self.color == "b":
                 if row == 7:
                     if square_is_empty(b, (6, col)):
@@ -43,8 +47,11 @@ class Piece:
                         available_moves.append((row - 1, col))
                 attacks = [(row - 1, col - 1), (row - 1, col + 1)]
                 for move in attacks:
-                    if is_enemy(b, move, self.color):
-                        available_moves.append(move)
+                    if move[0] < 1 or move[0] > 8 or move[1] > 8 or move[1] < 1:
+                        continue
+                    else:
+                        if is_enemy(b, move, self.color):
+                            available_moves.append(move)
 
         if self.piece_type == "b":
             for i, c in enumerate(range(col, 8)):
@@ -197,6 +204,7 @@ class Piece:
 
         # Remove all moves that fall off the board
         for i, move in reversed(list(enumerate(available_moves))):
+            # print(i, move)
             if move[0] < 1 or move[0] > 8 or move[1] > 8 or move[1] < 1:
                 available_moves.pop(i)
 

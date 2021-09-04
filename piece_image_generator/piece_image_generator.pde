@@ -18,7 +18,7 @@ void setup() {
   pg.smooth();
   pg.beginDraw();
   //pg.stroke(0);
-  pg.fill(50, 50, 255);
+  pg.fill(#FFC947);
   //myFont = createFont("FreeSerif.otf", 100);
   //pg.textFont(myFont);
   //pg.textAlign(CENTER, CENTER);
@@ -26,6 +26,6 @@ void setup() {
   //pg.text("\u265a", width/2, height/2);
   pg.ellipse(width/2, height/2, width, height);
   pg.endDraw();
-  pg.save("blue.png");
+  pg.save("yellow.png");
  
 }

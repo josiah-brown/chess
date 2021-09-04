@@ -43,3 +43,29 @@ starting_positions = [
         Piece("assets/bn.png", 8, 7, "n", "b"),
         Piece("assets/br.png", 8, 8, "r", "b")  # index 63
 ]
+
+checkmate_position = [
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, Piece("assets/wk.png", 2, 5, "k", "w"), None, None, None,
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, Piece("assets/wr.png", 6, 5, "r", "w"), None, None, None,
+        None, None, None, Piece("assets/wr.png", 7, 4, "r", "w"), None, None, None, None,
+        None, Piece("assets/bk.png", 8, 2, "k", "b"), None, None, None, None, None, None
+]
+
+castling_position = [
+        Piece("assets/wr.png", 1, 1, "r", "w"), None, None, None,
+        Piece("assets/wk.png", 1, 5, "k", "w"), None, None, Piece("assets/wr.png", 1, 8, "r", "w"),
+
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None,
+        None, None, None, None, None, None, None, None,
+        Piece("assets/br.png", 8, 1, "r", "b"), None, None, None,
+        Piece("assets/bk.png", 8, 5, "k", "b"), None, None, Piece("assets/br.png", 8, 8, "r", "b"),
+        # None, Piece("assets/bq.png", 8, 2, "q", "b"), None, None, None, None, None, None
+]

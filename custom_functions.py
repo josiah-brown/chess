@@ -1,4 +1,5 @@
 
+
 def get_row_col_from_click(click) -> tuple:
     """Pass in tuple that represents click coordinates and return (col, row) of click"""
     r, c = 0, 0
@@ -115,5 +116,35 @@ def king_is_in_check(board, color):
     return False
 
 
+def squares_threatened(b, color, square_list: list):
+    moves = []
+    for p in b.squares:
+        if p and p.color != color:
+            p.calculate_moves(b)
+            moves.extend(p.possible_moves)
+    for s in square_list:
+        if s in moves:
+            return True
+    return False
 
 
+def castling_moves_allowed(b, color) -> list:
+    """Returns the list of castling moves allowed for the king of the given color"""
+    allowed = []
+    if color == "w" and not king_is_in_check(b, color):
+        if b.squares[0] and not b.squares[0].moved and not b.squares[1] and not b.squares[2] and not b.squares[3]\
+                and not squares_threatened(b, color, [(1, 3), (1, 4)]):
+            allowed.append((1, 3))
+        if b.squares[7] and not b.squares[7].moved and not b.squares[5] and not b.squares[6] \
+                and not squares_threatened(b, color, [(1, 6), (1, 7)]):
+            allowed.append((1, 7))
+    elif color == "b" and not king_is_in_check(b, color):
+        if b.squares[56] and not b.squares[56].moved and not b.squares[57] and not b.squares[58] and not b.squares[59] \
+                and not squares_threatened(b, color, [(8, 3), (8, 4)]):
+            allowed.append((8, 3))
+        if b.squares[63] and not b.squares[63].moved and not b.squares[61] and not b.squares[62] \
+                and not squares_threatened(b, color, [(8, 6), (8, 7)]):
+            allowed.append((8, 7))
+    return allowed
+
+# and not squares_threatened(b, color, [(1, 3), (1, 4)])
