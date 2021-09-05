@@ -18,6 +18,7 @@ void setup() {
   pg.smooth();
   pg.beginDraw();
   //pg.stroke(0);
+  pg.noStroke();
   pg.fill(#FFC947);
   //myFont = createFont("FreeSerif.otf", 100);
   //pg.textFont(myFont);
